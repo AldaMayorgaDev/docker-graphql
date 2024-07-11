@@ -39,11 +39,11 @@ jobs:
     # Construcción de imagen
     - name: Build Docker Image
       env:
-        NEW_VERSION: ${{steps.version.outputs.version}}
+        DOCKER_USER: ${{secrets.DOCKER_USER}}
+        NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
-        docker build -t aldahirmayorga/docker-graphql:NEW_VERSION .
-        docker build -t aldahirmayorga/docker-graphql:latest .
-
+        docker build -t $DOCKER_USER/docker-graphql:$NEW_VERSION .
+        docker build -t $DOCKER_USER/docker-graphql:latest .
     # Push de imagen
     - name: Push Docker Image
       env:
@@ -51,5 +51,5 @@ jobs:
         NEW_VERSION: ${{steps.version.outputs.version}}
       run: |
         echo "Pushing Version $NEW_VERSION"
-        docker push aldahirmayorga/docker-graphql:$NEW_VERSION
-        docker push aldahirmayorga/docker-graphql:latest
+        docker push $DOCKER_USER/docker-graphql:$NEW_VERSION
+        docker push $DOCKER_USER/docker-graphql:latest
